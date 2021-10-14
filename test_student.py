@@ -2,6 +2,7 @@
 import unittest
 from datetime import timedelta
 from student import Student
+from unittest.mock import patch
 
 
 class TestStudent(unittest.TestCase):
@@ -59,6 +60,14 @@ class TestStudent(unittest.TestCase):
         self.assertEqual(
             self.student.end_date, old_end_date + timedelta(days=5)
         )
+
+    def test_course_schedule(self):
+        with patch("student.requests.get") as mocked_get:
+            mocked_get.return_value.ok = True
+            mocked_get.return_value.text = "Success"
+
+            schedule = self.student.course_schedule()
+            self.assertEqual(schedule, "Success")
 
     def test_alert_santa(self):
         """Test if function alert_santa works"""

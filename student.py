@@ -1,5 +1,6 @@
 """ A Student class as base for method testing """
 from datetime import date, timedelta
+import requests
 
 
 class Student:
@@ -31,3 +32,14 @@ class Student:
     def apply_extension(self, days):
         """Applies an extension prolonging the end date"""
         self.end_date = self.end_date + timedelta(days=days)
+
+    def course_schedule(self):
+        firstname = self._first_name
+        lastname = self._last_name
+        response = requests.get(
+            "http://company.com/course-schedule/" + firstname + "/" + lastname
+        )
+
+        if response.ok:
+            return response.text
+        return "Something went wrong with the request."
